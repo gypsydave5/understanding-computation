@@ -36,9 +36,17 @@ end
 
 class Multiply < BinaryExpression
   def reduce
-    return Add.new(left.reduce, right) if left.reducible?
-    return Add.new(left, right.reduce) if right.reducible?
+    return Multiply.new(left.reduce, right) if left.reducible?
+    return Multiply.new(left, right.reduce) if right.reducible?
     Number.new(left.value * right.value)
+  end
+end
+
+class Subtract < BinaryExpression
+  def reduce
+    return Subtract.new(left.reduce, right) if left.reducible?
+    return Subtract.new(left, right.reduce) if right.reducible?
+    Number.new(left.value - right.value)
   end
 end
 
@@ -54,5 +62,6 @@ class Machine < Struct.new(:expression)
     end
 
     puts expression
+    expression
   end
 end

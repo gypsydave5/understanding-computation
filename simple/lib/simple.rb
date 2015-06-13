@@ -33,9 +33,9 @@ class And < BinaryExpression
     "#{left} && #{right}"
   end
 
-  def reduce
-    return And.new(left.reduce, right) if left.reducible?
-    return And.new(left, right.reduce) if right.reducible?
+  def reduce(environment)
+    return And.new(left.reduce(environment), right) if left.reducible?
+    return And.new(left, right.reduce(environment)) if right.reducible?
     Boolean.new(left.value && right.value)
   end
 end
@@ -45,9 +45,9 @@ class Add < BinaryExpression
     "#{left} + #{right}"
   end
 
-  def reduce
-    return Add.new(left.reduce, right) if left.reducible?
-    return Add.new(left, right.reduce) if right.reducible?
+  def reduce(environment)
+    return Add.new(left.reduce(environment), right) if left.reducible?
+    return Add.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value + right.value)
   end
 end
@@ -57,9 +57,9 @@ class Multiply < BinaryExpression
     "#{left} * #{right}"
   end
 
-  def reduce
-    return Multiply.new(left.reduce, right) if left.reducible?
-    return Multiply.new(left, right.reduce) if right.reducible?
+  def reduce(environment)
+    return Multiply.new(left.reduce(environment), right) if left.reducible?
+    return Multiply.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value * right.value)
   end
 end
@@ -69,9 +69,9 @@ class Subtract < BinaryExpression
     "#{left} - #{right}"
   end
 
-  def reduce
-    return Subtract.new(left.reduce, right) if left.reducible?
-    return Subtract.new(left, right.reduce) if right.reducible?
+  def reduce(environment)
+    return Subtract.new(left.reduce(environment), right) if left.reducible?
+    return Subtract.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value - right.value)
   end
 end
@@ -81,16 +81,34 @@ class Divide < BinaryExpression
     "#{left} / #{right}"
   end
 
-  def reduce
-    return Divide.new(left.reduce, right) if left.reducible?
-    return Divide.new(left, right.reduce) if right.reducible?
+  def reduce(environment)
+    return Divide.new(left.reduce(environment), right) if left.reducible?
+    return Divide.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value / right.value)
   end
 end
 
-class Machine < Struct.new(:expression)
+class Variable < Struct.new(:name)
+  def to_s
+    name.to_s
+  end
+
+  def inspect
+    "«#{self}»"
+  end
+
+  def reducible?
+    true
+  end
+
+  def reduce(environment)
+    environment[name]
+  end
+end
+
+class Machine < Struct.new(:expression, :environment)
   def step
-    self.expression = expression.reduce
+    self.expression = expression.reduce(environment)
   end
 
   def run

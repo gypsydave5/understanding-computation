@@ -32,4 +32,10 @@ describe 'SIMPLE' do
     expect(machine.run).to eql Boolean.new(false)
   end
 
+  it 'can haz variables' do
+    expression = Add.new(Variable.new(:x), Variable.new(:y))
+    machine = Machine.new(expression, { x: Number.new(5), y: Number.new(2) })
+    expect(machine.run).to eql Number.new(7)
+  end
+
 end

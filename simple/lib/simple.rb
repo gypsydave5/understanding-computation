@@ -1,8 +1,4 @@
 class BinaryExpression < Struct.new(:left, :right)
-  def to_s
-    "#{left} + #{right}"
-  end
-
   def inspect
     "«#{self}»"
   end
@@ -12,7 +8,7 @@ class BinaryExpression < Struct.new(:left, :right)
   end
 end
 
-class Number < Struct.new(:value)
+class Primitive < Struct.new(:value)
   def to_s
     value.to_s
   end
@@ -26,7 +22,29 @@ class Number < Struct.new(:value)
   end
 end
 
+class Number < Primitive
+end
+
+class Boolean < Primitive
+end
+
+class And < BinaryExpression
+  def to_s
+    "#{left} && #{right}"
+  end
+
+  def reduce
+    return And.new(left.reduce, right) if left.reducible?
+    return And.new(left, right.reduce) if right.reducible?
+    Boolean.new(left.value && right.value)
+  end
+end
+
 class Add < BinaryExpression
+  def to_s
+    "#{left} + #{right}"
+  end
+
   def reduce
     return Add.new(left.reduce, right) if left.reducible?
     return Add.new(left, right.reduce) if right.reducible?
@@ -35,6 +53,10 @@ class Add < BinaryExpression
 end
 
 class Multiply < BinaryExpression
+  def to_s
+    "#{left} * #{right}"
+  end
+
   def reduce
     return Multiply.new(left.reduce, right) if left.reducible?
     return Multiply.new(left, right.reduce) if right.reducible?
@@ -43,10 +65,26 @@ class Multiply < BinaryExpression
 end
 
 class Subtract < BinaryExpression
+  def to_s
+    "#{left} - #{right}"
+  end
+
   def reduce
     return Subtract.new(left.reduce, right) if left.reducible?
     return Subtract.new(left, right.reduce) if right.reducible?
     Number.new(left.value - right.value)
+  end
+end
+
+class Divide < BinaryExpression
+  def to_s
+    "#{left} / #{right}"
+  end
+
+  def reduce
+    return Divide.new(left.reduce, right) if left.reducible?
+    return Divide.new(left, right.reduce) if right.reducible?
+    Number.new(left.value / right.value)
   end
 end
 

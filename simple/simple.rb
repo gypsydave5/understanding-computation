@@ -1,3 +1,17 @@
+class BinaryExpression < Struct.new(:left, :right)
+  def to_s
+    "#{left} + #{right}"
+  end
+
+  def inspect
+    "«#{self}»"
+  end
+
+  def reducible?
+    true
+  end
+end
+
 class Number < Struct.new(:value)
   def to_s
     value.to_s
@@ -12,19 +26,7 @@ class Number < Struct.new(:value)
   end
 end
 
-class Add < Struct.new(:left, :right)
-  def to_s
-    "#{left} + #{right}"
-  end
-
-  def inspect
-    "«#{self}»"
-  end
-
-  def reducible?
-    true
-  end
-
+class Add < BinaryExpression
   def reduce
     return Add.new(left.reduce, right) if left.reducible?
     return Add.new(left, right.reduce) if right.reducible?
@@ -32,19 +34,7 @@ class Add < Struct.new(:left, :right)
   end
 end
 
-class Multiply < Struct.new(:left, :right)
-  def to_s
-    "#{left} * #{right}"
-  end
-
-  def inspect
-    "«#{self}»"
-  end
-
-  def reducible?
-    true
-  end
-
+class Multiply < BinaryExpression
   def reduce
     return Add.new(left.reduce, right) if left.reducible?
     return Add.new(left, right.reduce) if right.reducible?

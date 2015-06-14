@@ -68,3 +68,16 @@ class If < Struct.new(:condition, :consequence, :alternative)
     end
   end
 end
+
+class Sequence < Struct.new(:first, :second)
+  include Statement
+
+  def reduce(environment)
+    if first == DoNothing.new
+      [second, environment]
+    else
+      reduced_first, reduced_environment = first.reduce(environment)
+      [Sequence.new(reduced_first, second), reduced_environment]
+    end
+  end
+end

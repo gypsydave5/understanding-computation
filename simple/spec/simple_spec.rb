@@ -62,4 +62,14 @@ describe 'SIMPLE' do
     expect(machine.run.statement).to eq DoNothing.new
   end
 
+  it 'can do things in a sequence' do
+    statement = Sequence.new(
+      Assign.new(:x, Add.new(Number.new(1), Number.new(1))),
+      Assign.new(:y, Add.new(Variable.new(:x), Number.new(3)))
+    )
+    result = Machine.new(statement, {}).run
+    expect(result.environment[:x]).to eq Number.new(2)
+    expect(result.environment[:y]).to eq Number.new(5)
+  end
+
 end

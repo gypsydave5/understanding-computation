@@ -14,6 +14,6 @@ class Machine < Struct.new(:statement, :environment)
     end
 
     puts "#{statement}, #{environment}"
-    [statement, environment]
+    self
   end
 end

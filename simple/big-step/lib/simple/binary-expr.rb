@@ -23,6 +23,10 @@ class And < BinaryExpression
     Boolean.new(left.value && right.value)
   end
 
+  def evaluate(environment)
+    Boolean.new(left.evaluate(environment).value && right.evaluate(environment).value)
+  end
+
 end
 
 class LessThan < BinaryExpression
@@ -38,6 +42,10 @@ class LessThan < BinaryExpression
     else
       Boolean.new(left.value < right.value)
     end
+  end
+
+  def evaluate(environment)
+    Boolean.new(left.evaluate(environment).value < right.evaluate(environment).value)
   end
 end
 
@@ -67,6 +75,10 @@ class Multiply < BinaryExpression
     return Multiply.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value * right.value)
   end
+
+  def evaluate(environment)
+    Number.new(left.evaluate(environment).value * right.evaluate(environment).value)
+  end
 end
 
 class Subtract < BinaryExpression
@@ -79,6 +91,10 @@ class Subtract < BinaryExpression
     return Subtract.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value - right.value)
   end
+
+  def evaluate(environment)
+    Number.new(left.evaluate(environment).value - right.evaluate(environment).value)
+  end
 end
 
 class Divide < BinaryExpression
@@ -90,5 +106,9 @@ class Divide < BinaryExpression
     return Divide.new(left.reduce(environment), right) if left.reducible?
     return Divide.new(left, right.reduce(environment)) if right.reducible?
     Number.new(left.value / right.value)
+  end
+
+  def evaluate(environment)
+    Number.new(left.evaluate(environment).value / right.evaluate(environment).value)
   end
 end

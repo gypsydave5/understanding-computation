@@ -9,44 +9,42 @@ describe 'SIMPLE' do
 
   it 'can multiply' do
     expression = Multiply.new(Number.new(2), Number.new(2))
-    machine = Machine.new(expression)
-    expect(machine.run.statement).to eq Number.new(4)
+    expect(expression.evaluate({})).to eq Number.new(4)
   end
 
   it 'can subtract' do
     expression = Subtract.new(Number.new(4), Number.new(3))
-    machine = Machine.new(expression)
-    expect(machine.run.statement).to eq Number.new(1)
+    expect(expression.evaluate({})).to eq Number.new(1)
   end
 
   it 'can divide' do
     expression = Divide.new(Number.new(9), Number.new(3))
-    machine = Machine.new(expression)
-    expect(machine.run.statement).to eq Number.new(3)
+    expect(expression.evaluate({})).to eq Number.new(3)
   end
 
   it 'knows AND' do
     expression = And.new(Boolean.new(true), Boolean.new(false))
-    machine = Machine.new(expression)
-    expect(machine.run.statement).to eq Boolean.new(false)
+    expect(expression.evaluate({})).to eq Boolean.new(false)
   end
 
   it 'knows less than' do
     expression = LessThan.new(Number.new(2), Number.new(5))
-    machine = Machine.new(expression)
-    expect(machine.run.statement).to eq Boolean.new(true)
+    expect(expression.evaluate({})).to eq Boolean.new(true)
   end
 
   it 'can haz variables' do
     expression = Add.new(Variable.new(:x), Number.new(2))
-    machine = Machine.new(expression, { x: Number.new(5) })
-    expect(machine.run.statement).to eq Number.new(7)
+    expect(expression.evaluate({
+      x: Number.new(5)
+    })).to eq Number.new(7)
   end
 
   it 'can haz multiple variables' do
     expression = Add.new(Variable.new(:x), Variable.new(:y))
-    machine = Machine.new(expression, { x: Number.new(5), y: Number.new(2) })
-    expect(machine.run.statement).to eq Number.new(7)
+    expect(expression.evaluate({
+      x: Number.new(2),
+      y: Number.new(5)
+    })).to eq Number.new(7)
   end
 
   it 'can do assignment' do

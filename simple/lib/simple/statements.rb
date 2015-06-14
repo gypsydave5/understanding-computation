@@ -72,6 +72,10 @@ end
 class Sequence < Struct.new(:first, :second)
   include Statement
 
+  def to_s
+    "#{first}; #{second}"
+  end
+
   def reduce(environment)
     if first == DoNothing.new
       [second, environment]
@@ -81,3 +85,4 @@ class Sequence < Struct.new(:first, :second)
     end
   end
 end
+

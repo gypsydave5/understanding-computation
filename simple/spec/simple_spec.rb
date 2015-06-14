@@ -32,6 +32,12 @@ describe 'SIMPLE' do
     expect(machine.run.statement).to eq Boolean.new(false)
   end
 
+  it 'knows less than' do
+    expression = LessThan.new(Number.new(2), Number.new(5))
+    machine = Machine.new(expression)
+    expect(machine.run.statement).to eq Boolean.new(true)
+  end
+
   it 'can haz variables' do
     expression = Add.new(Variable.new(:x), Number.new(2))
     machine = Machine.new(expression, { x: Number.new(5) })

@@ -1,18 +1,26 @@
-class DoNothing
-  def to_s
-    'do-nothing'
+module Statement
+  def statement?
+    true
   end
 
   def inspect
     "«#{self}»"
   end
 
-  def ==(other_statement)
-    other_statement.instance_of?(DoNothing)
+  def reducible?
+    true
+  end
+end
+
+class DoNothing
+  include Statement
+
+  def to_s
+    'do-nothing'
   end
 
-  def statement?
-    true
+  def ==(other_statement)
+    other_statement.instance_of?(DoNothing)
   end
 
   def reducible?
@@ -21,20 +29,10 @@ class DoNothing
 end
 
 class Assign < Struct.new(:name, :expression)
+  include Statement
+
   def to_s
     "#{name} = #{expression}"
-  end
-
-  def inspect
-    "«#{self}»"
-  end
-
-  def reducible?
-    true
-  end
-
-  def statement?
-    true
   end
 
   def reduce(environment)
@@ -47,6 +45,7 @@ class Assign < Struct.new(:name, :expression)
 end
 
 class If < Struct.new(:condition, :consequence, :alternative)
+  include Statement
 
   def initialize(condition, consequence, alternative = DoNothing.new)
     super
@@ -54,18 +53,6 @@ class If < Struct.new(:condition, :consequence, :alternative)
 
   def to_s
     "if (#{condition}) { #{consequence} } else { #{alternative} }"
-  end
-
-  def inspect
-    "«#{self}»"
-  end
-
-  def reducible?
-    true
-  end
-
-  def statement?
-    true
   end
 
   def reduce(environment)

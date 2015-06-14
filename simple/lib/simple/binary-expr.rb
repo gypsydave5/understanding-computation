@@ -6,6 +6,10 @@ class BinaryExpression < Struct.new(:left, :right)
   def reducible?
     true
   end
+
+  def statement?
+    false
+  end
 end
 
 class And < BinaryExpression
@@ -79,6 +83,10 @@ class Variable < Struct.new(:name)
 
   def reducible?
     true
+  end
+
+  def statement?
+    false
   end
 
   def reduce(environment)

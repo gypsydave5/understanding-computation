@@ -78,4 +78,23 @@ describe 'SIMPLE' do
     expect(result.environment[:y]).to eq Number.new(5)
   end
 
+  it 'can do things in a while loop' do
+    statement = Sequence.new(
+      Assign.new(:x, Number.new(0)),
+      While.new(
+        LessThan.new(
+          Variable.new(:x), Number.new(5)
+        ),
+        Assign.new(
+          :x,
+          Add.new(
+            Variable.new(:x),
+            Number.new(1)
+          )
+        )
+      )
+    )
+    result = Machine.new(statement, {}).run
+    expect(result.environment[:x]).to eq Number.new(5)
+  end
 end

@@ -6,9 +6,13 @@ class And < BinaryExpression
   end
 
   def reduce(environment)
-    return And.new(left.reduce(environment), right) if left.reducible?
-    return And.new(left, right.reduce(environment)) if right.reducible?
-    Boolean.new(left.value && right.value)
+    if left.reducible?
+      And.new(left.reduce(environment), right)
+    elsif right.reducible?
+      And.new(left, right.reduce(environment))
+    else
+      Boolean.new(left.value && right.value)
+    end
   end
 
   def evaluate(environment)

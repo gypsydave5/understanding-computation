@@ -6,9 +6,13 @@ class Multiply < BinaryExpression
   end
 
   def reduce(environment)
-    return Multiply.new(left.reduce(environment), right) if left.reducible?
-    return Multiply.new(left, right.reduce(environment)) if right.reducible?
-    Number.new(left.value * right.value)
+    if left.reducible?
+      Multiply.new(left.reduce(environment), right)
+    elsif right.reducible?
+      Multiply.new(left, right.reduce(environment))
+    else
+      Number.new(left.value * right.value)
+    end
   end
 
   def evaluate(environment)

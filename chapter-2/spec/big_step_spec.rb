@@ -49,9 +49,9 @@ describe 'SIMPLE in big step operational semantics' do
 
   it 'can do assignment' do
     statement = Assign.new(:x, Add.new(Variable.new(:x), Number.new(1)))
-    expect(statement.evaluate(
-      {x: Number.new(2)}
-    )[:x]).to eq Number.new(3)
+    expect(statement.evaluate({
+      x: Number.new(2)
+    })[:x]).to eq Number.new(3)
   end
 
   it 'knows what if means' do

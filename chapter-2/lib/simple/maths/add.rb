@@ -6,9 +6,13 @@ class Add < BinaryExpression
   end
 
   def reduce(environment)
-    return Add.new(left.reduce(environment), right) if left.reducible?
-    return Add.new(left, right.reduce(environment)) if right.reducible?
-    Number.new(left.value + right.value)
+    if left.reducible?
+      Add.new(left.reduce(environment), right)
+    elsif right.reducible?
+      Add.new(left, right.reduce(environment))
+    else
+      Number.new(left.value + right.value)
+    end
   end
 
   def evaluate(environment)

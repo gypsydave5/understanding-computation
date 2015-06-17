@@ -6,9 +6,13 @@ class Subtract < BinaryExpression
   end
 
   def reduce(environment)
-    return Subtract.new(left.reduce(environment), right) if left.reducible?
-    return Subtract.new(left, right.reduce(environment)) if right.reducible?
-    Number.new(left.value - right.value)
+    if left.reducible?
+      Subtract.new(left.reduce(environment), right)
+    elsif right.reducible?
+      Subtract.new(left, right.reduce(environment))
+    else
+      Number.new(left.value - right.value)
+    end
   end
 
   def evaluate(environment)

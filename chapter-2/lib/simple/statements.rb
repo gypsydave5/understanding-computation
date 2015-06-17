@@ -73,7 +73,10 @@ class If < Struct.new(:condition, :consequence, :alternative)
 
   def reduce(environment)
     if condition.reducible?
-      [If.new(condition.reduce(environment), consequence, alternative), environment]
+      [
+        If.new(condition.reduce(environment), consequence, alternative),
+        environment
+      ]
     else
       case condition
       when Boolean.new(true)
@@ -94,14 +97,12 @@ class If < Struct.new(:condition, :consequence, :alternative)
   end
 
   def to_ruby
-    """
-    -> e {
-      if (#{condition.to_ruby}).call(e)
-      then (#{consequence.to_ruby}).call(e)
-      else (#{alternative.to_ruby}).call(e)
-      end
-    }
-    """
+    "-> e { " +
+      "if (#{condition.to_ruby}).call(e); " +
+      "then (#{consequence.to_ruby}).call(e); " +
+      "else (#{alternative.to_ruby}).call(e); " +
+      "end" +
+      "}"
   end
 end
 
@@ -151,6 +152,11 @@ class While < Struct.new(:condition, :body)
   end
 
   def to_ruby
-    " -> e { while (#{condition.to_ruby}).call(e); e = (#{body.to_ruby}).call(e); end; e}"
+    " -> e { " +
+      "while (#{condition.to_ruby}).call(e); " +
+      "e = (#{body.to_ruby}).call(e); " +
+      "end; " +
+      "e " +
+      "}"
   end
 end

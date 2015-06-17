@@ -7,8 +7,16 @@ class Primitive < Struct.new(:value)
     "«#{self}»"
   end
 
+  def reducible?
+    false
+  end
+
   def evaluate(environment)
     self
+  end
+
+  def to_ruby
+    "-> e { #{value.inspect} }"
   end
 end
 

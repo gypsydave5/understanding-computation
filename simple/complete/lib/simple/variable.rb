@@ -18,5 +18,13 @@ class Variable < Struct.new(:name)
   def reduce(environment)
     environment[name]
   end
+
+  def evaluate(environment)
+    environment[name]
+  end
+
+  def to_ruby
+    "-> e { e[#{name.inspect}] }"
+  end
 end
 

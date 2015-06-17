@@ -1,1 +1,0 @@
-Dir[__dir__ + "/simple/*.rb"].each {|file| require file}

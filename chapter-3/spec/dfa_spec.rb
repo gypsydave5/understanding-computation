@@ -25,6 +25,12 @@ describe 'A Deterministic Finate Automata' do
       expect(DFA.new(1, [3], rulebook).accepting?).to be false
     end
 
+    it 'can read input characters' do
+      dfa = DFA.new(1, [3], rulebook)
+      dfa.read_character('a').read_character('a').read_character('b')
+      expect(dfa.accepting?).to be true
+    end
+
   end
 
 end

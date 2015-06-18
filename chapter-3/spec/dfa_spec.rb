@@ -1,6 +1,7 @@
 require 'dfa-rulebook'
 require 'fa-rule'
 require 'dfa'
+require 'dfa-design'
 
 describe 'A Deterministic Finate Automata' do
 
@@ -29,6 +30,18 @@ describe 'A Deterministic Finate Automata' do
       dfa = DFA.new(1, [3], rulebook)
       dfa.read_character('a').read_character('a').read_character('b')
       expect(dfa.accepting?).to be true
+    end
+
+    it 'can read strings of input characters' do
+      dfa = DFA.new(1, [3], rulebook)
+      dfa.read_string('baaaab')
+      expect(dfa.accepting?).to be true
+    end
+
+    it 'can report on the acceptability of strings' do
+      dfa_design = DFADesign.new(1, [3], rulebook)
+      expect(dfa_design.accepts?('baa')).to be false
+      expect(dfa_design.accepts?('baba')).to be true
     end
 
   end

@@ -12,5 +12,9 @@ class NFA < Struct.new(:current_states, :accept_states, :rulebook)
     string.each_char { |character| read_character(character) }
     self
   end
+
+  def current_states
+    rulebook.follow_free_moves(super)
+  end
 end
 

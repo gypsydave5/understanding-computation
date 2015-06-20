@@ -21,6 +21,13 @@ describe 'a nondeterministic finite automata' do
       expect(rulebook.follow_free_moves(Set[1])).to eql Set[1, 2, 4]
     end
 
+    it 'reports on acceptance with rules that include freemoves' do
+      nfa_design = NFADesign.new(1, [2, 4], rulebook)
+      expect(nfa_design.accepts?('aa')).to be true
+      expect(nfa_design.accepts?('aaa')).to be true
+      expect(nfa_design.accepts?('aaaaa')).to be false
+      expect(nfa_design.accepts?('aaaaaa')).to be true
+    end
   end
 end
 

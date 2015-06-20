@@ -1,6 +1,7 @@
 require 'nfa-rulebook'
 require 'fa-rule'
 require 'nfa'
+require 'nfa-design'
 
 describe 'a nondeterministic finite automata' do
 
@@ -38,6 +39,12 @@ describe 'a nondeterministic finite automata' do
     it 'knows how to read a string' do
       nfa = NFA.new(Set[1], [4], rulebook).read_string('babbbab')
       expect(nfa.accepting?).to be true
+    end
+
+    it 'can report on the acceptability of strings' do
+      nfa_design = NFADesign.new(1, [4], rulebook)
+      expect(nfa_design.accepts?('abb')).to be false
+      expect(nfa_design.accepts?('babbbbab')).to be true
     end
 
   end

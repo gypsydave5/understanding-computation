@@ -1,5 +1,6 @@
 require 'nfa-rulebook'
 require 'fa-rule'
+require 'nfa'
 
 describe 'a nondeterministic finite automata' do
 
@@ -21,6 +22,11 @@ describe 'a nondeterministic finite automata' do
       expect(rulebook.next_states(Set[1, 2], 'a')).to eql Set[1, 3]
       expect(rulebook.next_states(Set[1, 3], 'b')).to eql Set[1, 2, 4]
       expect(rulebook.next_states(Set[1, 3], 'a')).to eql Set[1, 4]
+    end
+
+    it 'knows the current state of the automata' do
+      expect(NFA.new(Set[1], [4], rulebook).accepting?).to be false
+      expect(NFA.new(Set[1, 2, 4], [4], rulebook).accepting?).to be true
     end
 
   end

@@ -29,5 +29,16 @@ describe 'a nondeterministic finite automata' do
       expect(NFA.new(Set[1, 2, 4], [4], rulebook).accepting?).to be true
     end
 
+    it 'knows how to read a character' do
+      nfa = NFA.new(Set[1], [4], rulebook)
+      nfa.read_character('b').read_character('a').read_character('b')
+      expect(nfa.accepting?).to be true
+    end
+
+    it 'knows how to read a string' do
+      nfa = NFA.new(Set[1], [4], rulebook).read_string('babbbab')
+      expect(nfa.accepting?).to be true
+    end
+
   end
 end
